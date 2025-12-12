@@ -574,15 +574,15 @@ const FunTodo: React.FC = () => {
                                     {todo.subtasks.map((sub) => (
                                       <li
                                         key={sub.id}
-                                        className="flex items-center gap-2 text-xs bg-gray-50 dark:bg-slate-700 rounded px-2 py-1 w-full justify-between"
+                                        className="flex items-center gap-2 text-sm bg-gray-50 dark:bg-slate-700 rounded px-2 py-1 w-full justify-between"
                                       >
-                                        <div className="flex items-center gap-2 flex-1">
+                                        <div className="flex gap-2 flex-1">
                                           <Checkbox
                                             checked={sub.completed}
                                             onCheckedChange={() =>
                                               toggleSubtask(todo.id, sub.id)
                                             }
-                                            className="scale-75"
+                                            className="scale-75 mt-1"
                                           />
                                           <span
                                             className={
