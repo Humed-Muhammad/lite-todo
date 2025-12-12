@@ -298,15 +298,15 @@ const FunTodo: React.FC = () => {
       <Card
         className={`w-full h-auto lg:h-auto max-w-xl ${shadow} border-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg`}
       >
-        <CardHeader className="text-center flex flex-col gap-5">
+        <CardHeader className="text-center flex flex-col gap-2">
+          <CardTitle className="text-2xl md:text-3xl font-bold bg-linear-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
+            Todo List
+          </CardTitle>
           <div className="flex justify-between items-center w-full p-0">
             <CardFooter className="justify-between text-sm text-gray-400 p-0  gap-3">
               <span>{grouped.active.length} active</span>
               <span>{todos.length} total</span>
             </CardFooter>
-            <CardTitle className="text-2xl md:text-3xl font-bold bg-linear-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
-              Todo List
-            </CardTitle>
 
             <label className="flex items-center gap-1 cursor-pointer text-sm">
               <Switch
@@ -321,7 +321,7 @@ const FunTodo: React.FC = () => {
           <div className="flex flex-wrap md:flex-nowrap gap-2 md:justify-center md:items-center mt-1">
             <div className="flex items-center gap-1 grow">
               <Select value={shadow} onValueChange={setShadow}>
-                <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
+                <SelectTrigger className="h-7 text-sm w-40 sm:w-28">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -334,7 +334,7 @@ const FunTodo: React.FC = () => {
               </Select>
 
               <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
+                <SelectTrigger className="h-7 text-sm w-40 sm:w-28">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -350,12 +350,12 @@ const FunTodo: React.FC = () => {
             <div className="flex items-center gap-2">
               <Button
                 onClick={exportTodos}
-                className="h-7 px-2 text-sm whitespace-nowrap"
+                className="h-7 px-2 text-sm whitespace-nowrap w-40 md:w-auto"
               >
                 Export
               </Button>
 
-              <label className="h-7 px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
+              <label className="h-7 w-40 md:w-auto px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
                 Import
                 <input
                   type="file"
