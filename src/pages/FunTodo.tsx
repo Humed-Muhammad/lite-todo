@@ -224,49 +224,53 @@ const FunTodo: React.FC = () => {
           </div>
 
           {/* Controls */}
-          <div className="flex  gap-2 justify-center items-center mt-1">
-            <Select value={shadow} onValueChange={setShadow}>
-              <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {SHADOWS.map((s) => (
-                  <SelectItem value={s.value} key={s.value}>
-                    {s.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex flex-wrap md:flex-nowrap gap-2 md:justify-center md:items-center mt-1">
+            <div className="flex items-center gap-1 grow">
+              <Select value={shadow} onValueChange={setShadow}>
+                <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {SHADOWS.map((s) => (
+                    <SelectItem value={s.value} key={s.value}>
+                      {s.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-            <Select value={filter} onValueChange={setFilter}>
-              <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {FILTERS.map((f) => (
-                  <SelectItem value={f.value} key={f.value}>
-                    {f.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <Select value={filter} onValueChange={setFilter}>
+                <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {FILTERS.map((f) => (
+                    <SelectItem value={f.value} key={f.value}>
+                      {f.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-            <Button
-              onClick={exportTodos}
-              className="h-7 px-2 text-sm whitespace-nowrap"
-            >
-              Export
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={exportTodos}
+                className="h-7 px-2 text-sm whitespace-nowrap"
+              >
+                Export
+              </Button>
 
-            <label className="h-7 px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
-              Import
-              <input
-                type="file"
-                accept="application/json"
-                onChange={importTodos}
-                className="hidden"
-              />
-            </label>
+              <label className="h-7 px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
+                Import
+                <input
+                  type="file"
+                  accept="application/json"
+                  onChange={importTodos}
+                  className="hidden"
+                />
+              </label>
+            </div>
           </div>
         </CardHeader>
 
