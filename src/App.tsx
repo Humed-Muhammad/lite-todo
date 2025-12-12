@@ -3,9 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 
-import { SignupPage } from "./pages/SignupPage";
-import LegalPage from "./pages/LegalPage";
-import { LoginPage } from "./pages/Login";
 import { LoadingCircle } from "./components/icons";
 import { motion, useScroll, useTransform } from "framer-motion";
 import FunTodo from "./pages/FunTodo";
@@ -48,12 +45,6 @@ const App: React.FC = () => {
             path="/"
             element={!user ? <FunTodo /> : <Navigate to="/signup" />}
           />
-          <Route
-            path="/signup"
-            element={!user ? <SignupPage /> : <Navigate to="/" />}
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/legal" element={<LegalPage />} />
         </Routes>
       </BrowserRouter>
     </>
