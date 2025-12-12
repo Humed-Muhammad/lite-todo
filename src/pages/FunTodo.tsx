@@ -293,10 +293,10 @@ const FunTodo: React.FC = () => {
   };
 
   return (
-    <div className="flex-col gap-3 h-screen flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800 grayscale p-3">
+    <div className="flex-col gap-3 min-h-screen h-auto flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800 grayscale p-3">
       <img width={80} src="/to-do-list.png" />
       <Card
-        className={`w-full h-full lg:h-auto max-w-xl ${shadow} border-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg`}
+        className={`w-full h-auto lg:h-auto max-w-xl ${shadow} border-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg`}
       >
         <CardHeader className="text-center flex flex-col gap-5">
           <div className="flex justify-between items-center w-full p-0">
