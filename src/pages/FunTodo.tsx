@@ -69,6 +69,10 @@ const FunTodo: React.FC = () => {
 
   const [input, setInput] = useState("");
 
+  // Editing state
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState("");
+
   // Persist theme
   useEffect(() => {
     if (dark) {
@@ -122,9 +126,42 @@ const FunTodo: React.FC = () => {
     );
   };
 
+  // Revert cancelled → active
+  const revertCancelled = (id: number) => {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, status: "active" } : todo
+      )
+    );
+  };
+
   // Remove todo
   const removeTodo = (id: number) =>
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+
+  // Edit handlers
+  const startEditing = (todo: Todo) => {
+    setEditingId(todo.id);
+    setEditingText(todo.text);
+  };
+
+  const saveEdit = () => {
+    if (!editingText.trim()) return;
+
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === editingId ? { ...todo, text: editingText.trim() } : todo
+      )
+    );
+
+    setEditingId(null);
+    setEditingText("");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingText("");
+  };
 
   // Import / export
   const importTodos = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,19 +214,17 @@ const FunTodo: React.FC = () => {
             <CardTitle className="text-2xl md:text-3xl font-bold bg-linear-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
               Todo List
             </CardTitle>
-            {/* Dark mode */}
             <label className="flex items-center gap-1 cursor-pointer text-sm">
               <Switch
                 checked={dark}
                 onCheckedChange={() => setDark((d) => !d)}
-                className="accent-gray-700"
               />
               Dark
             </label>
           </div>
+
           {/* Controls */}
           <div className="flex  gap-2 justify-center items-center mt-1">
-            {/* Shadow Select */}
             <Select value={shadow} onValueChange={setShadow}>
               <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
                 <SelectValue />
@@ -203,7 +238,6 @@ const FunTodo: React.FC = () => {
               </SelectContent>
             </Select>
 
-            {/* Filter Select */}
             <Select value={filter} onValueChange={setFilter}>
               <SelectTrigger className="h-7 text-sm w-24 sm:w-28">
                 <SelectValue />
@@ -217,31 +251,26 @@ const FunTodo: React.FC = () => {
               </SelectContent>
             </Select>
 
-            {/* Export */}
-            <>
-              <Button
-                onClick={exportTodos}
-                className="h-7 px-2 text-sm whitespace-nowrap"
-              >
-                Export
-              </Button>
+            <Button
+              onClick={exportTodos}
+              className="h-7 px-2 text-sm whitespace-nowrap"
+            >
+              Export
+            </Button>
 
-              {/* Import */}
-              <label className="h-7 px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
-                Import
-                <input
-                  type="file"
-                  accept="application/json"
-                  onChange={importTodos}
-                  className="hidden"
-                />
-              </label>
-            </>
+            <label className="h-7 px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
+              Import
+              <input
+                type="file"
+                accept="application/json"
+                onChange={importTodos}
+                className="hidden"
+              />
+            </label>
           </div>
         </CardHeader>
 
         <CardContent>
-          {/* Add Todo */}
           <div className="flex gap-2 mb-6">
             <Input
               value={input}
@@ -278,41 +307,102 @@ const FunTodo: React.FC = () => {
                           checked={todo.status === "completed"}
                           onCheckedChange={() => toggleTodo(todo.id)}
                         />
-                        <span
-                          className={`text-base break-words ${
-                            todo.status === "completed"
-                              ? "line-through text-gray-400"
-                              : todo.status === "cancelled"
-                              ? "text-red-400 line-through"
-                              : "text-gray-700 dark:text-gray-200"
-                          }`}
-                        >
-                          {todo.text}
-                        </span>
+
+                        {/* EDITING MODE */}
+                        {editingId === todo.id ? (
+                          <Input
+                            value={editingText}
+                            onChange={(e) => setEditingText(e.target.value)}
+                            onKeyDown={(e) => e.key === "Enter" && saveEdit()}
+                            className="h-8 text-sm"
+                            autoFocus
+                          />
+                        ) : (
+                          <span
+                            className={`text-base break-words ${
+                              todo.status === "completed"
+                                ? "line-through text-gray-400"
+                                : todo.status === "cancelled"
+                                ? "text-red-400 line-through"
+                                : "text-gray-700 dark:text-gray-200"
+                            }`}
+                          >
+                            {todo.text}
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex gap-2">
-                        {/* Cancel */}
-                        {todo.status !== "cancelled" && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => cancelTodo(todo.id)}
-                            className="text-gray-400 hover:text-orange-500"
-                          >
-                            <XCircle className="w-5 h-5" />
-                          </Button>
-                        )}
+                        {/* Save / Cancel edit */}
+                        {editingId === todo.id ? (
+                          <>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={saveEdit}
+                              className="text-green-500"
+                            >
+                              ✔
+                            </Button>
 
-                        {/* Delete */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeTodo(todo.id)}
-                          className="text-gray-400 hover:text-red-500"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={cancelEdit}
+                              className="text-red-500"
+                            >
+                              ✖
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            {/* Edit */}
+                            {todo.status !== "cancelled" && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => startEditing(todo)}
+                                className="text-blue-500 hover:text-blue-700"
+                              >
+                                ✎
+                              </Button>
+                            )}
+
+                            {/* Revert Cancelled */}
+                            {todo.status === "cancelled" && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => revertCancelled(todo.id)}
+                                className="text-yellow-500 hover:text-yellow-600"
+                              >
+                                ↺
+                              </Button>
+                            )}
+
+                            {/* Cancel */}
+                            {todo.status !== "cancelled" && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => cancelTodo(todo.id)}
+                                className="text-gray-400 hover:text-orange-500"
+                              >
+                                <XCircle className="w-5 h-5" />
+                              </Button>
+                            )}
+
+                            {/* Delete */}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeTodo(todo.id)}
+                              className="text-gray-400 hover:text-red-500"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </li>
                   ))}
