@@ -321,7 +321,7 @@ const FunTodo: React.FC = () => {
           <div className="flex flex-wrap md:flex-nowrap gap-2 md:justify-center md:items-center mt-1">
             <div className="flex items-center gap-1 grow">
               <Select value={shadow} onValueChange={setShadow}>
-                <SelectTrigger className="h-7 text-sm w-40 sm:w-28">
+                <SelectTrigger className="h-7 text-sm grow">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -334,7 +334,7 @@ const FunTodo: React.FC = () => {
               </Select>
 
               <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger className="h-7 text-sm w-40 sm:w-28">
+                <SelectTrigger className="h-7 text-sm grow min-w-32">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -347,15 +347,15 @@ const FunTodo: React.FC = () => {
               </Select>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex grow items-center gap-2">
               <Button
                 onClick={exportTodos}
-                className="h-7 px-2 text-sm whitespace-nowrap w-40 md:w-auto"
+                className="h-7 px-2 text-sm whitespace-nowrap grow md:w-auto"
               >
                 Export
               </Button>
 
-              <label className="h-7 w-40 md:w-auto px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
+              <label className="h-7 grow md:w-auto px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
                 Import
                 <input
                   type="file"
