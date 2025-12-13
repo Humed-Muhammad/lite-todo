@@ -14,9 +14,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Trash2, Plus, XCircle } from "lucide-react";
+import { Trash2, Plus, XCircle, ArrowLeft } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 interface Subtask {
   id: number;
@@ -319,15 +319,28 @@ const FunTodo: React.FC = () => {
       >
         <CardHeader className="flex flex-col gap-3 px-4 py-3 bg-transparent">
           <div className="flex items-center justify-between w-full mb-1">
-            <div className="flex items-center gap-3">
-              <img
-                width={36}
-                src="/to-do-list.png"
-                className="rounded shadow-sm bg-white/70 dark:bg-gray-800/70 p-1"
-              />
-              <CardTitle className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
-                Todo List
-              </CardTitle>
+            <div className="flex items-center">
+              <div className="flex absolute left-0 top-0">
+                <Link to="/">
+                  <Button
+                    size="icon"
+                    className="rounded-none rounded-tl-md"
+                    variant="ghost"
+                  >
+                    <ArrowLeft />
+                  </Button>
+                </Link>
+              </div>
+              <div className="flex items-center gap-3 mt-1">
+                <img
+                  width={36}
+                  src="/to-do-list.png"
+                  className="rounded shadow-sm bg-white/70 dark:bg-gray-800/70 p-1"
+                />
+                <CardTitle className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
+                  Todo List
+                </CardTitle>
+              </div>
             </div>
             <label className="flex items-center gap-1 cursor-pointer text-xs md:text-sm text-gray-500 dark:text-gray-300">
               <Switch
