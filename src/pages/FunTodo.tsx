@@ -74,7 +74,7 @@ const FunTodo: React.FC = () => {
       if (saved) {
         const allTodos: Todo[] = JSON.parse(saved);
         return allTodos.filter((todo) =>
-          todo.collection.toString().startsWith(collectionId)
+          todo?.collection?.toString().startsWith(collectionId)
         );
       } else {
         return [];
@@ -428,7 +428,7 @@ const FunTodo: React.FC = () => {
                         {(groupTodos as Todo[]).map((todo, idx) => (
                           <Draggable
                             key={todo.id}
-                            draggableId={todo.id.toString()}
+                            draggableId={todo?.id?.toString()}
                             index={idx}
                           >
                             {(provided, snapshot) => (
