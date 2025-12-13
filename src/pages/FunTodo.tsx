@@ -313,7 +313,7 @@ const FunTodo: React.FC = () => {
   };
 
   return (
-    <div className="flex-col gap-3 min-h-screen h-auto flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800 grayscale p-3">
+    <div className="flex-col gap-3 min-h-screen h-auto flex items-center justify-center bg-linear-to-br from-gray-200 to-gray-300 dark:from-gray-900 dark:to-gray-800 grayscale p-3">
       <Card
         className={`w-full h-auto lg:h-auto max-w-xl ${shadow} border-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg`}
       >
@@ -337,7 +337,7 @@ const FunTodo: React.FC = () => {
                   src="/to-do-list.png"
                   className="rounded shadow-sm bg-white/70 dark:bg-gray-800/70 p-1"
                 />
-                <CardTitle className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
+                <CardTitle className="text-xl md:text-2xl font-bold text-gray-700 dark:text-gray-200">
                   Todo List
                 </CardTitle>
               </div>
@@ -416,7 +416,7 @@ const FunTodo: React.FC = () => {
             />
             <Button
               onClick={addTodo}
-              className="bg-linear-to-r from-gray-700 to-gray-400 text-white shadow"
+              className="dark:text-white text-black bg-gray-200 dark:bg-gray-700 shadow"
               size="icon"
             >
               <Plus />
