@@ -170,7 +170,7 @@ const Collections: React.FC = () => {
         </div>
       )}
 
-      {collections.length >= 0 ? (
+      {collections.length === 0 ? (
         <div className="flex p-2 flex-col items-center justify-center h-64 w-full max-w-2xl bg-white/80 dark:bg-gray-900/80 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
           <Folder className="w-10 h-10 text-gray-300 dark:text-gray-700 mb-2" />
           <span className="text-gray-400 dark:text-gray-600 text-lg text-center">
