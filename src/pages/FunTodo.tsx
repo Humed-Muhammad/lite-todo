@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,6 +16,7 @@ import {
 
 import { Trash2, Plus, XCircle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { useParams } from "react-router-dom";
 
 interface Subtask {
   id: number;
@@ -31,6 +26,7 @@ interface Subtask {
 
 interface Todo {
   id: number;
+  collection: number;
   text: string;
   status: "active" | "completed" | "cancelled";
   subtasks?: Subtask[];
@@ -52,6 +48,7 @@ const FILTERS = [
 ];
 
 const FunTodo: React.FC = () => {
+  const { collectionId } = useParams<{ collectionId: string }>();
   // Dark mode
   const [dark, setDark] = useState(() => {
     return localStorage.getItem("theme") === "dark" ||
@@ -72,7 +69,19 @@ const FunTodo: React.FC = () => {
   // Todos
   const [todos, setTodos] = useState<Todo[]>(() => {
     const saved = localStorage.getItem("todos");
-    return saved ? JSON.parse(saved) : [];
+    // add collectionId filter
+    if (collectionId) {
+      if (saved) {
+        const allTodos: Todo[] = JSON.parse(saved);
+        return allTodos.filter((todo) =>
+          todo.collection.toString().startsWith(collectionId)
+        );
+      } else {
+        return [];
+      }
+    } else {
+      return saved ? JSON.parse(saved) : [];
+    }
   });
 
   // Subtask UI state
@@ -103,17 +112,24 @@ const FunTodo: React.FC = () => {
   // Persist UI states & todos
   useEffect(() => localStorage.setItem("shadow", shadow), [shadow]);
   useEffect(() => localStorage.setItem("filter", filter), [filter]);
-  useEffect(
-    () => localStorage.setItem("todos", JSON.stringify(todos)),
-    [todos]
-  );
+  useEffect(() => {
+    if (todos.length) {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
+  }, [todos]);
 
   // Add todo
   const addTodo = () => {
     if (!input.trim()) return;
     setTodos([
       ...todos,
-      { id: Date.now(), text: input.trim(), status: "active", subtasks: [] },
+      {
+        id: Date.now(),
+        collection: Number(collectionId),
+        text: input.trim(),
+        status: "active",
+        subtasks: [],
+      },
     ]);
     setInput("");
   };
@@ -247,6 +263,10 @@ const FunTodo: React.FC = () => {
     reader.onload = () => {
       try {
         const imported = JSON.parse(reader.result as string);
+        // Add collectionId to imported todos
+        imported.forEach((todo: Todo) => {
+          todo.collection = Number(collectionId);
+        });
         if (Array.isArray(imported)) setTodos(imported);
       } catch (error) {
         alert(`Error importing todos: ${(error as Error).message}`);
@@ -294,35 +314,42 @@ const FunTodo: React.FC = () => {
 
   return (
     <div className="flex-col gap-3 min-h-screen h-auto flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800 grayscale p-3">
-      <img width={80} src="/to-do-list.png" />
       <Card
         className={`w-full h-auto lg:h-auto max-w-xl ${shadow} border-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg`}
       >
-        <CardHeader className="text-center flex flex-col gap-2">
-          <CardTitle className="text-2xl md:text-3xl font-bold bg-linear-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
-            Todo List
-          </CardTitle>
-          <div className="flex justify-between items-center w-full p-0">
-            <CardFooter className="justify-between text-sm text-gray-400 p-0  gap-3">
-              <span>{grouped.active.length} active</span>
-              <span>{todos.length} total</span>
-            </CardFooter>
-
-            <label className="flex items-center gap-1 cursor-pointer text-sm">
+        <CardHeader className="flex flex-col gap-3 px-4 py-3 bg-transparent">
+          <div className="flex items-center justify-between w-full mb-1">
+            <div className="flex items-center gap-3">
+              <img
+                width={36}
+                src="/to-do-list.png"
+                className="rounded shadow-sm bg-white/70 dark:bg-gray-800/70 p-1"
+              />
+              <CardTitle className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-400 bg-clip-text text-transparent">
+                Todo List
+              </CardTitle>
+            </div>
+            <label className="flex items-center gap-1 cursor-pointer text-xs md:text-sm text-gray-500 dark:text-gray-300">
               <Switch
                 checked={dark}
                 onCheckedChange={() => setDark((d) => !d)}
+                className="scale-90"
               />
               Dark
             </label>
           </div>
 
+          <div className="flex items-center justify-between w-full text-xs md:text-sm text-gray-400 mb-2">
+            <span>{grouped.active.length} active</span>
+            <span>{todos.length} total</span>
+          </div>
+
           {/* Controls */}
-          <div className="flex flex-wrap md:flex-nowrap gap-2 md:justify-center md:items-center mt-1">
-            <div className="flex items-center gap-1 grow">
+          <div className="flex flex-col md:flex-row gap-2 w-full">
+            <div className="flex flex-1 gap-2">
               <Select value={shadow} onValueChange={setShadow}>
-                <SelectTrigger className="h-7 text-sm grow">
-                  <SelectValue />
+                <SelectTrigger className="h-7 text-xs md:text-sm min-w-20">
+                  <SelectValue placeholder="Shadow" />
                 </SelectTrigger>
                 <SelectContent>
                   {SHADOWS.map((s) => (
@@ -332,10 +359,9 @@ const FunTodo: React.FC = () => {
                   ))}
                 </SelectContent>
               </Select>
-
               <Select value={filter} onValueChange={setFilter}>
-                <SelectTrigger className="h-7 text-sm grow min-w-32">
-                  <SelectValue />
+                <SelectTrigger className="h-7 text-xs md:text-sm min-w-24">
+                  <SelectValue placeholder="Filter" />
                 </SelectTrigger>
                 <SelectContent>
                   {FILTERS.map((f) => (
@@ -346,16 +372,14 @@ const FunTodo: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="flex grow items-center gap-2">
+            <div className="flex flex-1 gap-2 justify-end">
               <Button
                 onClick={exportTodos}
-                className="h-7 px-2 text-sm whitespace-nowrap grow md:w-auto"
+                className="h-7 px-3 text-xs md:text-sm font-medium bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
               >
                 Export
               </Button>
-
-              <label className="h-7 grow md:w-auto px-2 text-sm flex items-center bg-gray-200 dark:bg-gray-700 border rounded cursor-pointer whitespace-nowrap">
+              <label className="h-7 px-3 text-xs md:text-sm font-medium flex items-center bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition">
                 Import
                 <input
                   type="file"
@@ -597,7 +621,7 @@ const FunTodo: React.FC = () => {
                                         <Button
                                           variant="ghost"
                                           size="icon"
-                                          className="text-gray-400 hover:text-red-500 h-5 w-5"
+                                          className="text-gray-400 hover:text-red-500 h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity"
                                           onClick={() =>
                                             removeSubtask(todo.id, sub.id)
                                           }
