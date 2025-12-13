@@ -9,7 +9,7 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/todos/:collectionId" element={<FunTodo />} />
-          <Route path="/collections" element={<Collections />} />
+          <Route path="/" element={<Collections />} />
         </Routes>
       </BrowserRouter>
     </>
