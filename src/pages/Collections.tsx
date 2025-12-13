@@ -113,7 +113,7 @@ const Collections: React.FC = () => {
   }, []);
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800 p-6">
-      <div className="border-b-2 pb-2 w-full max-w-3xl mb-3 flex justify-end">
+      <div className="border-b border-stone-300 pb-2 w-full max-w-3xl mb-3 flex justify-end">
         <label className="flex items-center gap-1 cursor-pointer text-xs md:text-sm text-gray-500 dark:text-gray-300">
           <Switch
             checked={dark}
@@ -124,11 +124,11 @@ const Collections: React.FC = () => {
         </label>
       </div>
       <div className="w-full max-w-3xl flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-400 dark:from-gray-200 dark:to-gray-500 bg-clip-text text-transparent">
+        <h1 className="text-xl font-bold bg-gradient-to-r from-gray-700 to-gray-400 dark:from-gray-200 dark:to-gray-500 bg-clip-text text-transparent">
           Collections
         </h1>
         <Button
-          className="bg-gradient-to-r from-gray-700 to-gray-500 dark:from-gray-300 dark:to-gray-500 text-white dark:text-gray-900"
+          className="bg-gradient-to-r from-gray-700 to-gray-500 dark:from-gray-300 dark:to-gray-500 text-white dark:text-gray-900 text-sm"
           onClick={() => setShowForm((v) => !v)}
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -170,10 +170,10 @@ const Collections: React.FC = () => {
         </div>
       )}
 
-      {collections.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-64 w-full max-w-2xl bg-white/80 dark:bg-gray-900/80 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
+      {collections.length >= 0 ? (
+        <div className="flex p-2 flex-col items-center justify-center h-64 w-full max-w-2xl bg-white/80 dark:bg-gray-900/80 rounded-lg border border-dashed border-gray-300 dark:border-gray-700">
           <Folder className="w-10 h-10 text-gray-300 dark:text-gray-700 mb-2" />
-          <span className="text-gray-400 dark:text-gray-600 text-lg">
+          <span className="text-gray-400 dark:text-gray-600 text-lg text-center">
             No collections yet. Click "New Collection" to add one.
           </span>
         </div>
